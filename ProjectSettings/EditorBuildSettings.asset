@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ParentScene.unity
     guid: 78b6fad263ea5b14ebcf7c829449952d
+  - enabled: 1
+    path: Assets/Scenes/ChildScene.unity
+    guid: 7d298fd78dbf8994e9d2b16f9493d3f3
   m_configObjects: {}
