@@ -1,7 +1,10 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using UnityEngine;
 
 public class APIManager
 {
@@ -21,7 +24,7 @@ public class APIManager
 
     private const string BASE_URL = "http://127.0.0.1:8000/api/";
 
-    public async void Login(string email, string password)
+    public async Task Login(string email, string password)
     {
         Dictionary<string, string> values = new Dictionary<string, string>
         {
@@ -33,12 +36,15 @@ public class APIManager
         HttpResponseMessage response = await client.PostAsync(BASE_URL + "login", content);
         response.EnsureSuccessStatusCode();
 
-        jwt = await response.Content.ReadAsStringAsync();
+        string responseStr = await response.Content.ReadAsStringAsync();
+
+        JToken token = JObject.Parse(responseStr);
+        jwt = (string)token.SelectToken("token");
+
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-        Debug.WriteLine(jwt);
     }
 
-    public async void Refresh()
+    public async Task Refresh()
     {
         jwt = await client.GetStringAsync(BASE_URL + "refresh");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
