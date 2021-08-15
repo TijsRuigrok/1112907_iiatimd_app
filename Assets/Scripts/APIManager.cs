@@ -21,10 +21,9 @@ public class APIManager
 
     public HttpClient client = new HttpClient();
     public string jwt;
+    public const string BaseURL = "http://127.0.0.1:8000/api/";
 
-    private const string BASE_URL = "http://127.0.0.1:8000/api/";
-
-    public async Task Login(string email, string password)
+    public async Task<bool> Login(string email, string password)
     {
         Dictionary<string, string> values = new Dictionary<string, string>
         {
@@ -33,7 +32,7 @@ public class APIManager
         };
 
         FormUrlEncodedContent content = new FormUrlEncodedContent(values);
-        HttpResponseMessage response = await client.PostAsync(BASE_URL + "login", content);
+        HttpResponseMessage response = await client.PostAsync(BaseURL + "login", content);
         response.EnsureSuccessStatusCode();
 
         string responseStr = await response.Content.ReadAsStringAsync();
@@ -42,11 +41,16 @@ public class APIManager
         jwt = (string)token.SelectToken("token");
 
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+        if (response.IsSuccessStatusCode)
+            return true;
+        
+        else return false;
     }
 
     public async Task Refresh()
     {
-        jwt = await client.GetStringAsync(BASE_URL + "refresh");
+        jwt = await client.GetStringAsync(BaseURL + "refresh");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
     }
 }
