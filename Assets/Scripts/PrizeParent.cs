@@ -12,13 +12,13 @@ public class PrizeParent : MonoBehaviour
 
     void Start()
     {
-        nameText.text = prize.Name;
-        pointsText.text = prize.Points.ToString();
+        nameText.text = prize.name;
+        pointsText.text = prize.points.ToString();
     }
 
     public async void DeletePrize()
     {
         await APIManager.Instance.client.DeleteAsync(
-            APIManager.BaseURL + "prizes/self/delete/" + prize.Id);
+            APIManager.BaseURL + "prizes/self/delete/" + prize.id);
     }
 }

@@ -1,13 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 
+[Serializable]
 public class Chore
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public int Points { get; set; }
-    public string Date { get; set; }
-    public bool Completed { get; set; }
-    public int UserId { get; set; }
+    public int id;
+    public string name;
+    public int points;
+    public string date;
+    public bool completed = false;
+    public int userId;
 }

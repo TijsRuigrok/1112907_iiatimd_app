@@ -5885,6 +5885,18 @@ PrefabInstance:
       propertyPath: m_text
       value: Points
       objectReference: {fileID: 0}
+    - target: {fileID: 4119440931028085516, guid: 4f66a4e8d49dbf54192783fd9fd0b2d6, type: 3}
+      propertyPath: m_ContentType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4119440931028085516, guid: 4f66a4e8d49dbf54192783fd9fd0b2d6, type: 3}
+      propertyPath: m_KeyboardType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4119440931028085516, guid: 4f66a4e8d49dbf54192783fd9fd0b2d6, type: 3}
+      propertyPath: m_CharacterValidation
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4119440931028085618, guid: 4f66a4e8d49dbf54192783fd9fd0b2d6, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -9218,7 +9230,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 258102668}
   m_HandleRect: {fileID: 258102667}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

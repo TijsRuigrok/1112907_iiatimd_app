@@ -11,14 +11,14 @@ public class ChoreParent : MonoBehaviour
 
     void Start()
     {
-        nameText.text = chore.Name;
-        pointsText.text = chore.Points.ToString();
-        dateText.text = chore.Date;
+        nameText.text = chore.name;
+        pointsText.text = chore.points.ToString();
+        dateText.text = chore.date;
     }
 
     public async void DeleteChore()
     {
         await APIManager.Instance.client.DeleteAsync(
-            APIManager.BaseURL + "chores/self/delete/" + chore.Id);
+            APIManager.BaseURL + "chores/self/delete/" + chore.id);
     }
 }

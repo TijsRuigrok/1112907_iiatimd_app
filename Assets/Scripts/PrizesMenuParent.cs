@@ -31,7 +31,6 @@ public class PrizesMenuParent : MonoBehaviour
         for(int i = 0; i < prizes.Count; i++)
         {
             prizePrefabs.Add(Instantiate(prizePrefab, content.transform));
-            prizePrefabs[i].transform.SetParent(content.transform);
             prizePrefabs[i].prize = prizes[i];
         }
     }

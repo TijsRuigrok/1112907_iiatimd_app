@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 
+[Serializable]
 public class Prize
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public int Points { get; set; }
-    public bool Claimed { get; set; }
-    public int UserId { get; set; }
+    public int id;
+    public string name;
+    public int points;
+    public bool claimed = false;
+    public int userId;
 }
