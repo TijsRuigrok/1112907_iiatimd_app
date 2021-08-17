@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using TMPro;
@@ -9,24 +10,25 @@ using UnityEngine;
 
 public class ChoresMenuParent : MonoBehaviour
 {
-    [SerializeField] private ChoreParent choreParent;
+    [SerializeField] private ChoreParent chorePrefab;
     [SerializeField] private GameObject content;
 
     [SerializeField] private TMP_InputField nameInput;
     [SerializeField] private TMP_InputField pointsInput;
     [SerializeField] private TMP_InputField dateInput;
 
-    private List<ChoreParent> chorePrefabs = new List<ChoreParent>();
+    private List<ChoreData> choresData = new List<ChoreData>();
+    private List<ChoreParent> chores = new List<ChoreParent>();
 
-    private void Start()
+    private void OnEnable()
     {
         GetChores();
     }
 
     private void GetChores()
     {
-        List<Chore> chores = ProfileManager.Instance.currentProfile.chores;
-        
+        choresData = ProfileManager.Instance.currentProfile.choresData;
+
         /*
         string response = await APIManager.Instance.client.GetStringAsync(
             "http://127.0.0.1:8000/api/chores/self");
@@ -34,19 +36,23 @@ public class ChoresMenuParent : MonoBehaviour
         List<Chore> chores = JsonConvert.DeserializeObject<List<Chore>>(response);
         */
 
-        if(chorePrefabs.Count != 0)
-        {
-            foreach (ChoreParent chorePrefab in chorePrefabs)
-                Destroy(chorePrefab);
+        if (chores.Count != 0)
+            ClearChores();
 
-            chorePrefabs.Clear();
-        }
-
-        for (int i = 0; i < chores.Count; i++)
+        for (int i = 0; i < choresData.Count; i++)
         {
-            chorePrefabs.Add(Instantiate(choreParent, content.transform));
-            chorePrefabs[i].chore = chores[i];
+            chores.Add(Instantiate(chorePrefab, content.transform));
+            chores[i].choreData = choresData[i];
+            chores[i].choresMenu = this;
         }
+    }
+
+    private void ClearChores()
+    {
+        foreach (ChoreParent chore in chores)
+            Destroy(chore.gameObject);
+
+        chores.Clear();
     }
 
     public async void Submit()
@@ -57,13 +63,17 @@ public class ChoresMenuParent : MonoBehaviour
     private async Task AddChore(string name, string points, string date)
     {
         int pointsInt = Int32.Parse(points);
-        Chore newChore = new Chore
+
+        if (pointsInt < 0)
+            return;
+
+        ChoreData newChoreData = new ChoreData
         {
             name = name,
             points = pointsInt,
             date = date
         };
-        ProfileManager.Instance.currentProfile.chores.Add(newChore);
+        ProfileManager.Instance.currentProfile.choresData.Add(newChoreData);
         ProfileManager.Instance.SaveProfile();
 
         Dictionary<string, string> values = new Dictionary<string, string>
@@ -79,6 +89,27 @@ public class ChoresMenuParent : MonoBehaviour
         response.EnsureSuccessStatusCode();
 
         GetChores();
+    }
+
+    public void RemoveChore(Guid id)
+    {
+        foreach(ChoreData chore in choresData.ToList())
+        {
+            if(chore.id == id)
+            {
+                ProfileManager.Instance.currentProfile.choresData.Remove(chore);
+                ProfileManager.Instance.SaveProfile();
+                break;
+            }
+        }
+
+        ClearChores();
+        GetChores();
+
+        /*
+        await APIManager.Instance.client.DeleteAsync(
+            APIManager.BaseURL + "chores/self/delete/" + chore.id);
+        */
     }
 
 }

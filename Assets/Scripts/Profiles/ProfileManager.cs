@@ -52,6 +52,8 @@ public class ProfileManager
             email = email
         };
         LocalStorageManager.SaveProfile(newProfile);
+
+        currentProfile = newProfile;
     }
 
     public void SaveProfile()

@@ -481,8 +481,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5019178284620850628}
-        m_TargetAssemblyTypeName: ChoreParent, Assembly-CSharp
+      - m_Target: {fileID: 4856623707279070108}
+        m_TargetAssemblyTypeName: ChoreParentCompleted, Assembly-CSharp
         m_MethodName: Remove
         m_Mode: 1
         m_Arguments:
@@ -520,9 +520,9 @@ GameObject:
   - component: {fileID: 7903475547407241724}
   - component: {fileID: 7903475547407241715}
   - component: {fileID: 7903475547407241714}
-  - component: {fileID: 5019178284620850628}
+  - component: {fileID: 4856623707279070108}
   m_Layer: 5
-  m_Name: ChoreParent
+  m_Name: ChoreParentCompleted
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -604,7 +604,7 @@ MonoBehaviour:
   m_EffectColor: {r: 0.23529412, g: 0.23529412, b: 0.23529412, a: 0.3137255}
   m_EffectDistance: {x: 0, y: -10}
   m_UseGraphicAlpha: 1
---- !u!114 &5019178284620850628
+--- !u!114 &4856623707279070108
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -613,7 +613,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7903475547407241712}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2054fd18ff0d2d946b4015a89998abcc, type: 3}
+  m_Script: {fileID: 11500000, guid: a699e80c2fe7c4f4ebc99ae8366dcb02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   choreData:
@@ -625,7 +625,7 @@ MonoBehaviour:
   nameText: {fileID: 7903475547859410696}
   pointsText: {fileID: 7903475546343740452}
   dateText: {fileID: 7903475546327945344}
-  choresMenu: {fileID: 0}
+  completedMenu: {fileID: 0}
 --- !u!1 &7903475547619709552
 GameObject:
   m_ObjectHideFlags: 0

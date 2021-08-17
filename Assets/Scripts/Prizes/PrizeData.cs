@@ -1,9 +1,9 @@
 using System;
 
 [Serializable]
-public class Prize
+public class PrizeData
 {
-    public int id;
+    public Guid id = Guid.NewGuid();
     public string name;
     public int points;
     public bool claimed = false;

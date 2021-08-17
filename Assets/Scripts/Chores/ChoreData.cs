@@ -1,9 +1,9 @@
 using System;
 
 [Serializable]
-public class Chore
+public class ChoreData
 {
-    public int id;
+    public Guid id = Guid.NewGuid();
     public string name;
     public int points;
     public string date;
