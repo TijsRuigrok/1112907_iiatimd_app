@@ -27,4 +27,20 @@ public class APIManager
         string jwt = await client.GetStringAsync(BaseURL + "refresh");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
     }
+
+    public async Task AddChore(string name, string points, string date)
+    {
+        Dictionary<string, string> values = new Dictionary<string, string>
+        {
+            { "name", name },
+            { "points", points },
+            { "date", date }
+        };
+
+        FormUrlEncodedContent content = new FormUrlEncodedContent(values);
+        HttpResponseMessage response = await client.PostAsync(
+            BaseURL + "chores/create", content);
+        response.EnsureSuccessStatusCode();
+    }
+
 }

@@ -6,9 +6,10 @@ using UnityEngine.UI;
 
 public class ShowToggled : MonoBehaviour
 {
+    public Toggle checkmark;
+
     [SerializeField] private TMP_Text text;
     [SerializeField] private GameObject darkOverlay;
-    [SerializeField] private Toggle checkmark;
 
     private bool checkmarkChecked = false;
 
@@ -19,7 +20,7 @@ public class ShowToggled : MonoBehaviour
         });
     }
 
-    void CheckmarkValueChanged()
+    public void CheckmarkValueChanged()
     {
         if(checkmarkChecked)
         {

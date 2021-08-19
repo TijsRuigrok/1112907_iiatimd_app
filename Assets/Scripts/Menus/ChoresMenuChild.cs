@@ -8,7 +8,6 @@ public class ChoresMenuChild : MonoBehaviour
     [SerializeField] private ChoreChild chorePrefab;
     [SerializeField] private GameObject content;
 
-    private List<ChoreData> choresData = new List<ChoreData>();
     private List<ChoreChild> chores = new List<ChoreChild>();
 
     void OnEnable()
@@ -18,7 +17,7 @@ public class ChoresMenuChild : MonoBehaviour
 
     private void GetChores()
     {
-        choresData = ProfileManager.Instance.currentProfile.choresData;
+        List<ChoreData> choresData = ChoreManager.GetChores();
 
         if (chores.Count != 0)
             ClearChores();
@@ -27,6 +26,7 @@ public class ChoresMenuChild : MonoBehaviour
         {
             chores.Add(Instantiate(chorePrefab, content.transform));
             chores[i].choreData = choresData[i];
+            chores[i].CheckmarkValueChanged();
         }
     }
 

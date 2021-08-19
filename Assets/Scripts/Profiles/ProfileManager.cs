@@ -41,7 +41,7 @@ public class ProfileManager
             }
         }
 
-        if(currentProfile is null)
+        if (currentProfile is null)
             CreateProfile(currentProfileEmail);
     }
 
@@ -58,6 +58,12 @@ public class ProfileManager
 
     public void SaveProfile()
     {
+        LocalStorageManager.SaveProfile(currentProfile);
+    }
+
+    public void SetPoints(int points)
+    {
+        currentProfile.points += points;
         LocalStorageManager.SaveProfile(currentProfile);
     }
 }

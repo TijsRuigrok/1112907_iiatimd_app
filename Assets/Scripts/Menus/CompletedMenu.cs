@@ -12,10 +12,7 @@ public class CompletedMenu : MonoBehaviour
     [SerializeField] private GameObject contentChores;
     [SerializeField] private GameObject contentPrizes;
 
-    private List<ChoreData> choresData = new List<ChoreData>();
     private List<ChoreParentCompleted> chores = new List<ChoreParentCompleted>();
-
-    private List<PrizeData> prizesData = new List<PrizeData>();
     private List<PrizeParentClaimed> prizes = new List<PrizeParentClaimed>();
 
     void OnEnable()
@@ -26,7 +23,7 @@ public class CompletedMenu : MonoBehaviour
 
     private void GetCompletedChores()
     {
-        choresData = ProfileManager.Instance.currentProfile.choresData;
+        List<ChoreData> choresData = ChoreManager.GetChores();
 
         if (chores.Count != 0)
             ClearChores();
@@ -44,7 +41,7 @@ public class CompletedMenu : MonoBehaviour
 
     private void GetClaimedPrizes()
     {
-        prizesData = ProfileManager.Instance.currentProfile.prizesData;
+        List<PrizeData> prizesData = PrizeManager.GetPrizes();
 
         if (prizes.Count != 0)
             ClearPrizes();
@@ -78,15 +75,7 @@ public class CompletedMenu : MonoBehaviour
 
     internal void RemoveChore(Guid id)
     {
-        foreach (ChoreData chore in choresData.ToList())
-        {
-            if (chore.id == id)
-            {
-                ProfileManager.Instance.currentProfile.choresData.Remove(chore);
-                ProfileManager.Instance.SaveProfile();
-                break;
-            }
-        }
+        ChoreManager.RemoveChore(id);
 
         ClearChores();
         GetCompletedChores();
@@ -94,15 +83,7 @@ public class CompletedMenu : MonoBehaviour
 
     internal void RemovePrize(Guid id)
     {
-        foreach (PrizeData prize in prizesData.ToList())
-        {
-            if (prize.id == id)
-            {
-                ProfileManager.Instance.currentProfile.prizesData.Remove(prize);
-                ProfileManager.Instance.SaveProfile();
-                break;
-            }
-        }
+        PrizeManager.RemovePrize(id);
 
         ClearPrizes();
         GetClaimedPrizes();

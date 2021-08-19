@@ -17,7 +17,6 @@ public class ChoresMenuParent : MonoBehaviour
     [SerializeField] private TMP_InputField pointsInput;
     [SerializeField] private TMP_InputField dateInput;
 
-    private List<ChoreData> choresData = new List<ChoreData>();
     private List<ChoreParent> chores = new List<ChoreParent>();
 
     private void OnEnable()
@@ -27,14 +26,7 @@ public class ChoresMenuParent : MonoBehaviour
 
     private void GetChores()
     {
-        choresData = ProfileManager.Instance.currentProfile.choresData;
-
-        /*
-        string response = await APIManager.Instance.client.GetStringAsync(
-            "http://127.0.0.1:8000/api/chores/self");
-
-        List<Chore> chores = JsonConvert.DeserializeObject<List<Chore>>(response);
-        */
+        List<ChoreData> choresData = ChoreManager.GetChores();
 
         if (chores.Count != 0)
             ClearChores();
@@ -45,6 +37,13 @@ public class ChoresMenuParent : MonoBehaviour
             chores[i].choreData = choresData[i];
             chores[i].choresMenu = this;
         }
+
+        /*
+        string response = await APIManager.Instance.client.GetStringAsync(
+            "http://127.0.0.1:8000/api/chores/self");
+
+        List<Chore> chores = JsonConvert.DeserializeObject<List<Chore>>(response);
+        */
     }
 
     private void ClearChores()
@@ -55,53 +54,16 @@ public class ChoresMenuParent : MonoBehaviour
         chores.Clear();
     }
 
-    public async void Submit()
+    public async void AddChore()
     {
-        await AddChore(nameInput.text, pointsInput.text, dateInput.text);
-    }
-
-    private async Task AddChore(string name, string points, string date)
-    {
-        int pointsInt = Int32.Parse(points);
-
-        if (pointsInt < 0)
-            return;
-
-        ChoreData newChoreData = new ChoreData
-        {
-            name = name,
-            points = pointsInt,
-            date = date
-        };
-        ProfileManager.Instance.currentProfile.choresData.Add(newChoreData);
-        ProfileManager.Instance.SaveProfile();
-
-        Dictionary<string, string> values = new Dictionary<string, string>
-        {
-            { "name", name },
-            { "points", points },
-            { "date", date }
-        };
-
-        FormUrlEncodedContent content = new FormUrlEncodedContent(values);
-        HttpResponseMessage response = await APIManager.Instance.client.PostAsync(
-            APIManager.BaseURL + "chores/create", content);
-        response.EnsureSuccessStatusCode();
+        await ChoreManager.AddChore(nameInput.text, pointsInput.text, dateInput.text);
 
         GetChores();
     }
 
     public void RemoveChore(Guid id)
     {
-        foreach(ChoreData chore in choresData.ToList())
-        {
-            if(chore.id == id)
-            {
-                ProfileManager.Instance.currentProfile.choresData.Remove(chore);
-                ProfileManager.Instance.SaveProfile();
-                break;
-            }
-        }
+        ChoreManager.RemoveChore(id);
 
         ClearChores();
         GetChores();
