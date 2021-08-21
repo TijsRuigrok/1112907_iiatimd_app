@@ -290,7 +290,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1082864812}
         m_TargetAssemblyTypeName: SignupMenu, Assembly-CSharp
-        m_MethodName: Submit
+        m_MethodName: Register
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1341,7 +1341,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   emailInput: {fileID: 1425713363}
   passwordInput: {fileID: 1024434355}
-  menuManager: {fileID: 595463361}
+  sceneLoader: {fileID: 472858656}
 --- !u!1 &1093977574
 GameObject:
   m_ObjectHideFlags: 0
@@ -2638,8 +2638,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1555465331}
-        m_TargetAssemblyTypeName: Login, Assembly-CSharp
-        m_MethodName: Submit
+        m_TargetAssemblyTypeName: LoginMenu, Assembly-CSharp
+        m_MethodName: Login
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

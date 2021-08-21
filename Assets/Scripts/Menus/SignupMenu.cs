@@ -9,30 +9,25 @@ public class SignupMenu : MonoBehaviour
 {
     [SerializeField] private TMP_InputField emailInput;
     [SerializeField] private TMP_InputField passwordInput;
-    [SerializeField] private MenuManager menuManager;
+    [SerializeField] private SceneLoader sceneLoader;
 
-    public async void Submit()
+    private string email;
+    private string password;
+
+    public async void Register()
     {
-        await Register(emailInput.text, passwordInput.text);
-    }
+        email = emailInput.text;
+        password = passwordInput.text;
 
-    private async Task Register(string email, string password)
-    {
-        Dictionary<string, string> values = new Dictionary<string, string>
+        bool registrationSuccesful = await APIManager.Instance.Register(
+            email, password);
+
+        if (registrationSuccesful)
         {
-            { "email", email },
-            { "password", password }
-        };
-
-        FormUrlEncodedContent content = new FormUrlEncodedContent(values);
-        HttpResponseMessage response = await APIManager.Instance.client.PostAsync(
-            APIManager.BaseURL + "register", content);
-        response.EnsureSuccessStatusCode();
-
-        if (response.IsSuccessStatusCode)
-        {
-            ProfileManager.Instance.CreateProfile(email);
-            menuManager.OpenMenu("login menu");
+            ProfileManager.Instance.CreateProfile(emailInput.text);
+            await APIManager.Instance.Login(email, password);
+            ProfileManager.Instance.SetLastUpdate();
+            sceneLoader.LoadScene("SelectRoleScene");
         }
     }
 }

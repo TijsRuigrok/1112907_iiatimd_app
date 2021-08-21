@@ -24,40 +24,33 @@ public class PrizeManager
         return ProfileManager.Instance.currentProfile.prizesData;
     }
 
-    public static async Task AddPrize(string name, string points)
+    public static async void AddPrize(string name, string points)
     {
         int pointsInt = Int32.Parse(points);
 
         if (pointsInt < 0)
             return;
 
-        PrizeData newPrize = new PrizeData
+        PrizeData newPrizeData = new PrizeData
         {
             name = name,
             points = pointsInt
         };
-        ProfileManager.Instance.currentProfile.prizesData.Add(newPrize);
+        ProfileManager.Instance.currentProfile.prizesData.Add(newPrizeData);
         ProfileManager.Instance.SaveProfile();
 
-        Dictionary<string, string> values = new Dictionary<string, string>
-        {
-            { "name", name },
-            { "points", points }
-        };
-
-        FormUrlEncodedContent content = new FormUrlEncodedContent(values);
-        HttpResponseMessage response = await APIManager.Instance.client.PostAsync(
-            APIManager.BaseURL + "prizes/create", content);
-        response.EnsureSuccessStatusCode();
+        await APIManager.Instance.AddPrize(newPrizeData);
     }
 
-    public static void RemovePrize(Guid id)
+    public static async void RemovePrize(Guid id)
     {
         ProfileManager.Instance.currentProfile.prizesData.Remove(GetPrize(id));
         ProfileManager.Instance.SaveProfile();
+
+        await APIManager.Instance.RemovePrize(id);
     }
 
-    public static void ClaimPrize(Guid id)
+    public static async void ClaimPrize(Guid id)
     {
         PrizeData prize = GetPrize(id);
 
@@ -67,5 +60,7 @@ public class PrizeManager
             prize.claimed = true;
 
         ProfileManager.Instance.SaveProfile();
+
+        await APIManager.Instance.ClaimPrize(id);
     }
 }

@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class ChoreManager
@@ -40,20 +38,24 @@ public class ChoreManager
         ProfileManager.Instance.currentProfile.choresData.Add(newChoreData);
         ProfileManager.Instance.SaveProfile();
 
-        await APIManager.Instance.AddChore(name, points, date);
+        await APIManager.Instance.AddChore(newChoreData);
     }
     
-    public static void RemoveChore(Guid id)
+    public static async void RemoveChore(Guid id)
     {
         ProfileManager.Instance.currentProfile.choresData.Remove(GetChore(id));
         ProfileManager.Instance.SaveProfile();
+
+        await APIManager.Instance.RemoveChore(id);
     }
 
-    public static void CompleteChore(Guid id)
+    public static async void CompleteChore(Guid id)
     {
         ChoreData chore = GetChore(id);
         chore.completed = true;
-        
+
         ProfileManager.Instance.SaveProfile();
+
+        await APIManager.Instance.CompleteChore(id);
     }
 }

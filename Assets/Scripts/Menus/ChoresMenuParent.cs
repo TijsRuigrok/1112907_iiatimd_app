@@ -37,13 +37,6 @@ public class ChoresMenuParent : MonoBehaviour
             chores[i].choreData = choresData[i];
             chores[i].choresMenu = this;
         }
-
-        /*
-        string response = await APIManager.Instance.client.GetStringAsync(
-            "http://127.0.0.1:8000/api/chores/self");
-
-        List<Chore> chores = JsonConvert.DeserializeObject<List<Chore>>(response);
-        */
     }
 
     private void ClearChores()
@@ -54,10 +47,9 @@ public class ChoresMenuParent : MonoBehaviour
         chores.Clear();
     }
 
-    public async void AddChore()
+    public void AddChore()
     {
-        await ChoreManager.AddChore(nameInput.text, pointsInput.text, dateInput.text);
-
+        ChoreManager.AddChore(nameInput.text, pointsInput.text, dateInput.text);
         GetChores();
     }
 
@@ -67,11 +59,5 @@ public class ChoresMenuParent : MonoBehaviour
 
         ClearChores();
         GetChores();
-
-        /*
-        await APIManager.Instance.client.DeleteAsync(
-            APIManager.BaseURL + "chores/self/delete/" + chore.id);
-        */
     }
-
 }

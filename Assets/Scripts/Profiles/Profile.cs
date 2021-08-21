@@ -8,4 +8,5 @@ public class Profile
     public int points;
     public List<ChoreData> choresData = new List<ChoreData>();
     public List<PrizeData> prizesData = new List<PrizeData>();
+    public DateTime lastUpdate = DateTime.Now;
 }

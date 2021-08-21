@@ -36,13 +36,6 @@ public class PrizesMenuParent : MonoBehaviour
             prizes[i].prizeData = prizesData[i];
             prizes[i].prizeMenu = this;
         }
-
-        /*
-        string response = await APIManager.Instance.client.GetStringAsync(
-            "http://127.0.0.1:8000/api/prizes/self");
-
-        List<Prize> prizes = JsonConvert.DeserializeObject<List<Prize>>(response);
-        */
     }
 
     private void ClearPrizes()
@@ -53,10 +46,9 @@ public class PrizesMenuParent : MonoBehaviour
         prizes.Clear();
     }
 
-    public async void AddPrize()
+    public void AddPrize()
     {
-        await PrizeManager.AddPrize(nameInput.text, pointsInput.text);
-
+        PrizeManager.AddPrize(nameInput.text, pointsInput.text);
         GetPrizes();
     }
 
@@ -66,10 +58,5 @@ public class PrizesMenuParent : MonoBehaviour
 
         ClearPrizes();
         GetPrizes();
-
-        /*
-        await APIManager.Instance.client.DeleteAsync(
-            APIManager.BaseURL + "prizes/self/delete/" + prize.id);
-        */
     }
 }

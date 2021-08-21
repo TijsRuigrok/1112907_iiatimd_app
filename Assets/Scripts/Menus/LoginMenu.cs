@@ -13,36 +13,15 @@ public class LoginMenu : MonoBehaviour
     [SerializeField] private TMP_InputField inputPassword;
     [SerializeField] private SceneLoader sceneLoader;
 
-    public async void Submit()
+    public async void Login()
     {
-        await Login(inputEmail.text, inputPassword.text);        
-    }
+        bool loginSuccesful = await APIManager.Instance.Login(
+            inputEmail.text, inputPassword.text);
 
-    public async Task Login(string email, string password)
-    {
-        Dictionary<string, string> values = new Dictionary<string, string>
+        if (loginSuccesful)
         {
-            { "email", email },
-            { "password", password }
-        };
-
-        FormUrlEncodedContent content = new FormUrlEncodedContent(values);
-        HttpResponseMessage response = await APIManager.Instance.client.PostAsync(
-            APIManager.BaseURL + "login", content);
-        
-        response.EnsureSuccessStatusCode();
-
-        string responseStr = await response.Content.ReadAsStringAsync();
-
-        JToken token = JObject.Parse(responseStr);
-        string jwt = (string)token.SelectToken("token");
-
-        APIManager.Instance.client.DefaultRequestHeaders.Authorization = 
-            new AuthenticationHeaderValue("Bearer", jwt);
-
-        if (response.IsSuccessStatusCode)
-        {
-            ProfileManager.Instance.SetCurrentProfile(email);
+            ProfileManager.Instance.SetCurrentProfile(inputEmail.text);
+            ProfileManager.Instance.SyncData();
             sceneLoader.LoadScene("SelectRoleScene");
         }
     }
