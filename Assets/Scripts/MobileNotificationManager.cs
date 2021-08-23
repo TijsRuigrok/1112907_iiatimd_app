@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 #if UNITY_ANDROID
 using Unity.Notifications.Android;
@@ -9,7 +10,10 @@ using Unity.Notifications.Android;
 public class MobileNotificationManager : MonoBehaviour
 {
 #if UNITY_ANDROID
+    
     public AndroidNotificationChannel defaultNotificationChannel;
+    
+    private AndroidNotification notification;
     private int identifier;
 
     void Start()
@@ -24,17 +28,6 @@ public class MobileNotificationManager : MonoBehaviour
 
         AndroidNotificationCenter.RegisterNotificationChannel(defaultNotificationChannel);
 
-        AndroidNotification notification = new AndroidNotification()
-        {
-            Title = "Test Notification!",
-            Text = "This is a test notification!",
-            SmallIcon = "default",
-            LargeIcon = "default",
-            FireTime = System.DateTime.Now.AddSeconds(10)
-        };
-
-        identifier = AndroidNotificationCenter.SendNotification(notification, "default channel");
-
         AndroidNotificationCenter.NotificationReceivedCallback receivedNotificationHandler =
         delegate (AndroidNotificationIntentData data)
         {
@@ -47,11 +40,40 @@ public class MobileNotificationManager : MonoBehaviour
         };
 
         AndroidNotificationCenter.OnNotificationReceived += receivedNotificationHandler;
+    }
 
-        var notificationIntentData = AndroidNotificationCenter.GetLastNotificationIntent();
+    private void OnApplicationPause(bool pause)
+    {
+        DateTime now = DateTime.Now;
+        notification = new AndroidNotification()
+        {
+            Title = "Chore Manager",
+            Text = "Your chores are waiting for you!",
+            SmallIcon = "app_icon_small",
+            LargeIcon = "app_icon_large",
+            FireTime = now.AddDays(1)
+        };
 
-        if (notificationIntentData != null)
-            Debug.Log("App was opened with notification!");
+        if (AndroidNotificationCenter.
+        CheckScheduledNotificationStatus(identifier) == NotificationStatus.Scheduled)
+        {
+            // If the user has left the app and the app is not running, send them a new notification
+            // Replace the currently sceduled notification with a new notification
+            AndroidNotificationCenter.UpdateScheduledNotification(identifier, notification, "default_channel");
+        }
+
+        else if (AndroidNotificationCenter.
+        CheckScheduledNotificationStatus(identifier) == NotificationStatus.Delivered)
+        {
+            // Remove the notification from the status bar
+            AndroidNotificationCenter.CancelNotification(identifier);
+        }
+
+        else if (AndroidNotificationCenter.
+        CheckScheduledNotificationStatus(identifier) == NotificationStatus.Unknown)
+        {
+            identifier = AndroidNotificationCenter.SendNotification(notification, "default channel");
+        }
     }
 
 #endif

@@ -18,6 +18,10 @@ public class ProfileManager
 
     public Profile currentProfile;
 
+    /// <summary>
+    /// Retrieves all profiles from local storage.
+    /// </summary>
+    /// <returns>List containing all profiles.</returns>
     private List<Profile> GetAllProfiles()
     {
         List<Profile> profiles = new List<Profile>();
@@ -31,6 +35,10 @@ public class ProfileManager
         return profiles;
     }
 
+    /// <summary>
+    /// Sets profile that is currently used by application.
+    /// </summary>
+    /// <param name="currentProfileEmail">E-mailadres of profile that should be current.</param>
     public void SetCurrentProfile(string currentProfileEmail)
     {
         foreach (Profile profile in GetAllProfiles())
@@ -46,6 +54,10 @@ public class ProfileManager
             CreateProfile(currentProfileEmail);
     }
 
+    /// <summary>
+    /// Creates new profile and adds it to local storage.
+    /// </summary>
+    /// <param name="email">E-mailadres of new profile.</param>
     public void CreateProfile(string email)
     {
         Profile newProfile = new Profile
@@ -57,12 +69,19 @@ public class ProfileManager
         currentProfile = newProfile;
     }
 
+    /// <summary>
+    /// Saves all profile data to local storage.
+    /// </summary>
     public void SaveProfile()
     {
         LocalStorageManager.SaveProfile(currentProfile);
         SetLastUpdate();
     }
 
+    /// <summary>
+    /// Edits points of current profile.
+    /// </summary>
+    /// <param name="points">Points to be added.</param>
     public async void SetPoints(int points)
     {
         currentProfile.points += points;
@@ -71,6 +90,9 @@ public class ProfileManager
         await APIManager.Instance.SetPoints(currentProfile.points);
     }
 
+    /// <summary>
+    /// Syncs data between API and local storage. Most up-to-date database is used.
+    /// </summary>
     public async void SyncData()
     {
         DateTime lastUpdateAPI = await APIManager.Instance.GetLastUpdate();
@@ -104,6 +126,9 @@ public class ProfileManager
         }
     }
 
+    /// <summary>
+    /// Sets timestamp of last time API and local storage were updated.
+    /// </summary>
     public async void SetLastUpdate()
     {
         DateTime currentTime = DateTime.Now;

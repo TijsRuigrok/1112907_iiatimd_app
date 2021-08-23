@@ -6,7 +6,6 @@ using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using UnityEngine;
 
 public class APIManager
 {
@@ -26,12 +25,21 @@ public class APIManager
 
     #region Authentication
 
+    /// <summary>
+    /// Refreshes JWT because it's only valid for a limited time.
+    /// </summary>
     public async Task RefreshJWT()
     {
         string jwt = await client.GetStringAsync(BaseURL + "refresh");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
     }
 
+    /// <summary>
+    /// Retrieves JWT using login information.
+    /// </summary>
+    /// <param name="email">Users e-mailadres.</param>
+    /// <param name="password">Users password.</param>
+    /// <returns>Returns if login was succesful.</returns>
     public async Task<bool> Login(string email, string password)
     {
         Dictionary<string, string> values = new Dictionary<string, string>
@@ -61,6 +69,12 @@ public class APIManager
             return false;
     }
 
+    /// <summary>
+    /// Registers new account.
+    /// </summary>
+    /// <param name="email">Users e-mailadres.</param>
+    /// <param name="password">Users password.</param>
+    /// <returns>Returns if registration was succesful.</returns>
     public async Task<bool> Register(string email, string password)
     {
         Dictionary<string, string> values = new Dictionary<string, string>
@@ -85,6 +99,10 @@ public class APIManager
 
     #region Updated At
 
+    /// <summary>
+    /// Retrieves last date/time API was updated.
+    /// </summary>
+    /// <returns>Timestamp of last API update.</returns>
     public async Task<DateTime> GetLastUpdate()
     {
         string response = await client.GetStringAsync(
@@ -97,6 +115,11 @@ public class APIManager
         return timestamp;
     }
 
+    /// <summary>
+    /// Edits last update of API.
+    /// </summary>
+    /// <param name="timestamp">Timestamp of last API update.</param>
+    /// <returns>Timestamp of last API update.</returns>
     public async Task SetLastUpdate(DateTime timestamp)
     {
         Dictionary<string, string> values = new Dictionary<string, string>
@@ -116,12 +139,20 @@ public class APIManager
 
     #region Points
 
+    /// <summary>
+    /// Retrieves points of user.
+    /// </summary>
+    /// <returns>Users points.</returns>
     public async Task<int> GetPoints()
     {
         string response = await client.GetStringAsync(BaseURL + "users/self/points");
         return Int32.Parse(response);
     }
 
+    /// <summary>
+    /// Edits points of user.
+    /// </summary>
+    /// <param name="points">Amount of points to replace points in API.</param>
     public async Task SetPoints(int points)
     {
         Dictionary<string, string> values = new Dictionary<string, string>
@@ -141,6 +172,10 @@ public class APIManager
 
     #region Chores
 
+    /// <summary>
+    /// Adds chore to API.
+    /// </summary>
+    /// <param name="chore">Chore to be added.</param>
     public async Task AddChore(ChoreData chore)
     {
         Dictionary<string, string> values = new Dictionary<string, string>
@@ -157,6 +192,10 @@ public class APIManager
         response.EnsureSuccessStatusCode();
     }
 
+    /// <summary>
+    /// Adds list of chores to API.
+    /// </summary>
+    /// <param name="chores">List of chores to be added.</param>
     public async void AddChores(List<ChoreData> chores)
     {
         foreach (ChoreData chore in chores)
@@ -165,11 +204,19 @@ public class APIManager
         }
     }
 
+    /// <summary>
+    /// Removes chore from API.
+    /// </summary>
+    /// <param name="id">Id of chore to be removed.</param>
     public async Task RemoveChore(Guid id)
     {
         await client.DeleteAsync(BaseURL + $"chores/{id}");
     }
 
+    /// <summary>
+    /// Removes list of chores from API.
+    /// </summary>
+    /// <param name="chores">List of chores to be removed.</param>
     public async void RemoveChores(List<ChoreData> chores)
     {
         foreach (ChoreData chore in chores)
@@ -178,6 +225,10 @@ public class APIManager
         }
     }
 
+    /// <summary>
+    /// Changes "completed" value of chore to true.
+    /// </summary>
+    /// <param name="id">Id of chore to be completed.</param>
     public async Task CompleteChore(Guid id)
     {
         Dictionary<string, string> values = new Dictionary<string, string>
@@ -193,6 +244,10 @@ public class APIManager
         response.EnsureSuccessStatusCode();
     }
 
+    /// <summary>
+    /// Retrieves all chores of user.
+    /// </summary>
+    /// <returns>List containing all chores.</returns>
     public async Task<List<ChoreData>> GetChores()
     {
         string response = await client.GetStringAsync(
@@ -223,6 +278,10 @@ public class APIManager
 
     #region Prizes
 
+    /// <summary>
+    /// Adds prize to API.
+    /// </summary>
+    /// <param name="prize">Prize to be added.</param>
     public async Task AddPrize(PrizeData prize)
     {
         Dictionary<string, string> values = new Dictionary<string, string>
@@ -238,6 +297,10 @@ public class APIManager
         response.EnsureSuccessStatusCode();
     }
 
+    /// <summary>
+    /// Adds prize to API.
+    /// </summary>
+    /// <param name="prizes"></param>
     public async void AddPrizes(List<PrizeData> prizes)
     {
         foreach (PrizeData prize in prizes)
@@ -246,11 +309,19 @@ public class APIManager
         }
     }
 
+    /// <summary>
+    /// Removes prize from API.
+    /// </summary>
+    /// <param name="id">Id of prize to be removed.</param>
     public async Task RemovePrize(Guid id)
     {
         await client.DeleteAsync(BaseURL + $"prizes/{id}");
     }
 
+    /// <summary>
+    /// Removes list of prizes from API.
+    /// </summary>
+    /// <param name="prizes">List of prizes to be removed.</param>
     public async void RemovePrizes(List<PrizeData> prizes)
     {
         foreach (PrizeData prize in prizes)
@@ -259,6 +330,10 @@ public class APIManager
         }
     }
 
+    /// <summary>
+    /// Changes "claimed" value of prize to true.
+    /// </summary>
+    /// <param name="id">Id of prize to be claimed.</param>
     public async Task ClaimPrize(Guid id)
     {
         Dictionary<string, string> values = new Dictionary<string, string>
@@ -274,6 +349,10 @@ public class APIManager
         response.EnsureSuccessStatusCode();
     }
 
+    /// <summary>
+    /// Retrieves all prizes of user.
+    /// </summary>
+    /// <returns>List containing all prizes of user.</returns>
     public async Task<List<PrizeData>> GetPrizes()
     {
         string response = await client.GetStringAsync(
