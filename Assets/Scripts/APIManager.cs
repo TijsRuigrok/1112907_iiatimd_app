@@ -22,7 +22,9 @@ public class APIManager
     }
 
     public HttpClient client = new HttpClient();
-    public const string BaseURL = "http://127.0.0.1:8000/api/";
+    public const string BaseURL = "https://iiatimd-chore-manager.herokuapp.com/api/";
+
+    #region Authentication
 
     public async Task RefreshJWT()
     {
@@ -79,10 +81,14 @@ public class APIManager
             return false;
     }
 
+    #endregion
+
+    #region Updated At
+
     public async Task<DateTime> GetLastUpdate()
     {
         string response = await client.GetStringAsync(
-            BaseURL + "get-update-timestamp");
+            BaseURL + "users/self/updated-at");
 
         CultureInfo cultureInfo = new CultureInfo("en-US");
 
@@ -101,16 +107,18 @@ public class APIManager
         FormUrlEncodedContent content = new FormUrlEncodedContent(values);
         
         HttpResponseMessage response = await client.PutAsync(
-            BaseURL + "set-update-timestamp", content);
+            BaseURL + "users/self/updated-at", content);
         
         response.EnsureSuccessStatusCode();
     }
+
+    #endregion
 
     #region Points
 
     public async Task<int> GetPoints()
     {
-        string response = await client.GetStringAsync(BaseURL + "get-points");
+        string response = await client.GetStringAsync(BaseURL + "users/self/points");
         return Int32.Parse(response);
     }
 
@@ -124,7 +132,7 @@ public class APIManager
         FormUrlEncodedContent content = new FormUrlEncodedContent(values);
 
         HttpResponseMessage response = await client.PutAsync(
-            BaseURL + "set-points", content);
+            BaseURL + "users/self/points", content);
 
         response.EnsureSuccessStatusCode();
     }
@@ -145,7 +153,7 @@ public class APIManager
 
         FormUrlEncodedContent content = new FormUrlEncodedContent(values);
         HttpResponseMessage response = await client.PostAsync(
-            BaseURL + "chores/create", content);
+            BaseURL + "chores", content);
         response.EnsureSuccessStatusCode();
     }
 
@@ -159,8 +167,7 @@ public class APIManager
 
     public async Task RemoveChore(Guid id)
     {
-        await client.DeleteAsync(
-            BaseURL + "chores/self/delete/" + id.ToString());
+        await client.DeleteAsync(BaseURL + $"chores/{id}");
     }
 
     public async void RemoveChores(List<ChoreData> chores)
@@ -173,8 +180,17 @@ public class APIManager
 
     public async Task CompleteChore(Guid id)
     {
-        await client.GetAsync(
-            BaseURL + "chores/self/complete/" + id.ToString());
+        Dictionary<string, string> values = new Dictionary<string, string>
+        {
+            { "completed", "1" }
+        };
+
+        FormUrlEncodedContent content = new FormUrlEncodedContent(values);
+
+        HttpResponseMessage response = await client.PutAsync(
+            BaseURL + $"chores/{id}/completed", content);
+
+        response.EnsureSuccessStatusCode();
     }
 
     public async Task<List<ChoreData>> GetChores()
@@ -218,7 +234,7 @@ public class APIManager
 
         FormUrlEncodedContent content = new FormUrlEncodedContent(values);
         HttpResponseMessage response = await client.PostAsync(
-            BaseURL + "prizes/create", content);
+            BaseURL + "prizes", content);
         response.EnsureSuccessStatusCode();
     }
 
@@ -232,8 +248,7 @@ public class APIManager
 
     public async Task RemovePrize(Guid id)
     {
-        await client.DeleteAsync(
-            BaseURL + "prizes/self/delete/" + id.ToString());
+        await client.DeleteAsync(BaseURL + $"prizes/{id}");
     }
 
     public async void RemovePrizes(List<PrizeData> prizes)
@@ -246,8 +261,17 @@ public class APIManager
 
     public async Task ClaimPrize(Guid id)
     {
-        await client.GetAsync(
-            BaseURL + "prizes/self/claim/" + id.ToString());
+        Dictionary<string, string> values = new Dictionary<string, string>
+        {
+            { "claimed", "1" }
+        };
+
+        FormUrlEncodedContent content = new FormUrlEncodedContent(values);
+
+        HttpResponseMessage response = await client.PutAsync(
+            BaseURL + $"prizes/{id}/claimed", content);
+
+        response.EnsureSuccessStatusCode();
     }
 
     public async Task<List<PrizeData>> GetPrizes()

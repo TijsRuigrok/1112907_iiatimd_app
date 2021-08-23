@@ -424,7 +424,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4119440931028085516, guid: 4f66a4e8d49dbf54192783fd9fd0b2d6, type: 3}
       propertyPath: m_Text
-      value: password
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4119440931028085516, guid: 4f66a4e8d49dbf54192783fd9fd0b2d6, type: 3}
       propertyPath: m_InputType
@@ -2743,7 +2743,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4119440931028085516, guid: 4f66a4e8d49dbf54192783fd9fd0b2d6, type: 3}
       propertyPath: m_Text
-      value: tijs@gmail.com
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4119440931028085516, guid: 4f66a4e8d49dbf54192783fd9fd0b2d6, type: 3}
       propertyPath: m_ContentType
